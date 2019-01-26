@@ -3,13 +3,20 @@ Simple Android PDF Viewer (initialy) displayed in a recycler view library using 
 
 
 ## How to use
-``` kotlin
 
+``` kotlin
+    PdfViewer.Builder(rootView)
+      .build()
+      .load(file)
+```
+
+   All available options:
+``` kotlin
     PdfViewer.Builder(rootView)
       .view(view)
       .quality(PdfPageQuality)
-      .setMaxZoom(3f)
       .setZoomEnabled(true)
+      .setMaxZoom(3f) //zoom multiplier
       .setOnPageChangedListener(onPageChangedListener)
       .setOnErrorListener(onErrorListener)
       .build()
