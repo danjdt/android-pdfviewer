@@ -9,7 +9,7 @@ Simple Android PDF Viewer (initialy) displayed in a recycler view library using 
       .build()
       .load(file)
 ```
-# All available options:
+### All available options:
 ``` kotlin
     PdfViewer.Builder(rootView)
       .view(view)
