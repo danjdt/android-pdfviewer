@@ -37,9 +37,7 @@ class PdfViewer private constructor(private val mRootView: ViewGroup) : OnLoadFi
     @MainThread
     private fun display(file: File) {
         try {
-            (mView as View).id = R.id.viewPager
             mRootView.addView(mView as View)
-
             mView.setup(file)
         } catch (e: IOException) {
             mOnErrorListener?.onPdfRendererError(e)
@@ -61,8 +59,8 @@ class PdfViewer private constructor(private val mRootView: ViewGroup) : OnLoadFi
         FileLoader.loadFile(mContext, this, input)
     }
 
-    fun load(absPath: String) {
-        FileLoader.loadFile(mContext, this, absPath)
+    fun load(url: String) {
+        FileLoader.loadFile(mContext, this, url)
     }
 
     override fun onFileLoaded(file: File) {
