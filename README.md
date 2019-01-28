@@ -1,4 +1,4 @@
-# pdfviewer
+# Android PDFViewer
 Simple Android PDF Viewer (initialy) displayed in a recycler view library using https://developer.android.com/reference/android/graphics/pdf/PdfRenderer 
 
 
