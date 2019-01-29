@@ -6,8 +6,10 @@ A Android PDF Viewer that render pdf using `PdfRenderer` and displays it in a `R
 - Requires API Level 21
 
 ## Download
-
+```groovy
 implementation 'com.danjdt:pdfviewer:0.1.0'
+
+```
 
 ## How to use
 
