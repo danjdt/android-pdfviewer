@@ -7,7 +7,7 @@ A Android PDF Viewer that render pdf using `PdfRenderer` and displays it in a `R
 
 ## Download
 
-implementation 'compile 'com.danjdt:pdfviewer:0.1.0'
+implementation 'com.danjdt:pdfviewer:0.1.0'
 
 ## How to use
 
