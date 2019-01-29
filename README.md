@@ -1,7 +1,13 @@
 # Android PDFViewer
+[ ![Download](https://api.bintray.com/packages/danjdt/maven/pdfviewer/images/download.svg) ](https://bintray.com/danjdt/maven/pdfviewer/_latestVersion)
+
 A Android PDF Viewer that render pdf using `PdfRenderer` and displays it in a `RecyclerView`. The main goal was to render the pages only when necessary using `AsyncTask` to gain performance.
 
 - Requires API Level 21
+
+## Download
+
+implementation 'compile 'com.danjdt:pdfviewer:0.1.0'
 
 ## How to use
 
