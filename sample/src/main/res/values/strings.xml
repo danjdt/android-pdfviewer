@@ -1,7 +1,4 @@
 <resources>
     <string name="app_name">Sample</string>
-<<<<<<< Updated upstream
-=======
     <string name="pdf_page_counter">%d / %d</string>
->>>>>>> Stashed changes
 </resources>
