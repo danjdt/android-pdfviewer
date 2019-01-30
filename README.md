@@ -11,11 +11,6 @@ implementation 'com.danjdt:pdfviewer:0.1.0'
 
 ```
 
-|     Scroll    |     Zoom      |
-| ------------- | ------------- |
-| ![](gif1.gif) |![](git2.gif)  |
-
-
 ## How to use
 
 ``` kotlin
@@ -43,6 +38,11 @@ implementation 'com.danjdt:pdfviewer:0.1.0'
     pdfViewer.load(@RawRes resId : Int)
     pdfViewer.load(inputStream : InputStream)
 ```
+
+|     Scroll    |     Zoom      |
+| ------------- | ------------- |
+| ![](gif1.gif) |![](git2.gif)  |
+
 
 ## Customize
 - You can customize your view creating any view that implements `PdfViewInterface` and setting it into the `PdfViewer`
