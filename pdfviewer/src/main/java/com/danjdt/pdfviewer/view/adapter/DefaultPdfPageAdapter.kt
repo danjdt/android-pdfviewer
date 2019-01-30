@@ -17,7 +17,7 @@ class DefaultPdfPageAdapter(private val context: Context) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultPdfPageViewHolder {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.pdf_page, parent, false)
-        return DefaultPdfPageViewHolder(view, pdfRenderer, pageSize)
+        return DefaultPdfPageViewHolder(view, mPdfRenderer, mPageSize)
     }
 
     override fun onBindViewHolder(holder: DefaultPdfPageViewHolder, position: Int) {

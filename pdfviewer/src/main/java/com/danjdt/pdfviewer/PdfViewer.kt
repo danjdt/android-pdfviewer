@@ -39,6 +39,7 @@ class PdfViewer private constructor(private val mRootView: ViewGroup) : OnLoadFi
         try {
             mRootView.addView(mView as View)
             mView.setup(file)
+
         } catch (e: IOException) {
             mOnErrorListener?.onPdfRendererError(e)
 
@@ -79,7 +80,7 @@ class PdfViewer private constructor(private val mRootView: ViewGroup) : OnLoadFi
 
         private var pdfView: PdfViewInterface = PdfViewerRecyclerView(context)
 
-        private var quality: PdfPageQuality = PdfPageQuality.QUALITY_AUTO
+        private var quality: PdfPageQuality = PdfPageQuality.QUALITY_1080
 
         private var maxZoom: Float = 3f
 
@@ -121,7 +122,7 @@ class PdfViewer private constructor(private val mRootView: ViewGroup) : OnLoadFi
 
         fun build(): PdfViewer {
             val pdfViewer = PdfViewer(rootView as ViewGroup)
-            pdfView.setQuality(quality.value ?: Utils.getScreenWidth(context as Activity))
+            pdfView.setQuality(quality.value)
             pdfView.setZoomEnabled(isZoomEnabled)
             pdfView.setMaxZoom(maxZoom)
             pdfView.setOnPageChangedListener(onPageChangedListener)

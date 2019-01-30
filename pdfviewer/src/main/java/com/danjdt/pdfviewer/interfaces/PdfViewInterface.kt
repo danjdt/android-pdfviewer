@@ -1,6 +1,5 @@
 package com.danjdt.pdfviewer.interfaces
 
-import android.graphics.pdf.PdfRenderer
 import java.io.File
 
 /**

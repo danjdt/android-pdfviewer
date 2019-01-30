@@ -14,5 +14,4 @@ class ExtraSpaceLinearLayoutManager(private val context: Context?) : LinearLayou
     override fun getExtraLayoutSpace(state: RecyclerView.State?): Int {
         return Utils.getScreenHeight(context as Activity)
     }
-
 }

@@ -88,7 +88,11 @@ and
     }
     
 ```
+<<<<<<< Updated upstream
 then, 
+=======
+then
+>>>>>>> Stashed changes
 
 ``` kotlin
     val pdfRecyclerView = PdfViewerRecyclerView(context)

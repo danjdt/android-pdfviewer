@@ -5,44 +5,38 @@ import java.util.*
 
 class PdfPagePool {
 
-    private val maxPoolSizeInBytes = 100 * 1024 * 1024
+    private val mMaxPoolSizeInBytes = 100 * 1024 * 1024
 
-    private var poolSizeInBytes = 0
+    private var mPoolSizeInBytes = 0
 
-    private val pool: HashMap<Int, Bitmap?> = HashMap()
+    private val mPool: HashMap<Int, Bitmap?> = HashMap()
 
-    private val removeQueue: Queue<Int> = LinkedList<Int>()
+    private val mRemoveQueue: Queue<Int> = LinkedList<Int>()
 
     fun put(position: Int, bitmap: Bitmap) {
-        if (pool[position] == null) {
-            while (poolSizeInBytes > maxPoolSizeInBytes) {
+        if (mPool[position] == null) {
+            while (mPoolSizeInBytes > mMaxPoolSizeInBytes) {
                 removeLast()
             }
 
-            removeQueue.offer(position)
+            mRemoveQueue.offer(position)
 
-            pool[position] = bitmap
-            poolSizeInBytes += bitmap.byteCount
+            mPool[position] = bitmap
+            mPoolSizeInBytes += bitmap.byteCount
         }
     }
 
     fun get(position: Int) : Bitmap? {
-        return pool[position]
+        return mPool[position]
     }
 
     fun exists(position: Int): Boolean {
-        return pool[position] != null
-    }
-
-    fun clear(){
-        pool.clear()
-        removeQueue.clear()
-        poolSizeInBytes = 0
+        return mPool[position] != null
     }
 
     private fun removeLast() {
-        val removePos = removeQueue.poll()
-        poolSizeInBytes -= pool[removePos]!!.byteCount
-        pool.remove(removePos)
+        val removePos = mRemoveQueue.poll()
+        mPoolSizeInBytes -= mPool[removePos]!!.byteCount
+        mPool.remove(removePos)
     }
 }

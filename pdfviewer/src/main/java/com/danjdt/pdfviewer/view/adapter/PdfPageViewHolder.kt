@@ -7,26 +7,26 @@ import android.util.Size
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.danjdt.pdfviewer.renderer.PdfRendererProxy
+import com.danjdt.pdfviewer.interfaces.PdfRendererInterface
 import com.danjdt.pdfviewer.interfaces.ViewHolderInterface
 
 /**
  * Created by daniel.teixeira on 15/01/19
  */
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-abstract class PdfPageViewHolder(view: View, val pdfRenderer: PdfRendererProxy, val pageSize: Size?) :
+abstract class PdfPageViewHolder(view: View, val pdfRenderer: PdfRendererInterface, val pageSize: Size?) :
     RecyclerView.ViewHolder(view), ViewHolderInterface {
 
-    var pagePosition = -1
+    var mPagePosition = -1
 
     private val activity = view.context as Activity
 
     final override fun shouldRender(index: Int): Boolean {
-        return this.pagePosition == index
+        return this.mPagePosition == index
     }
 
     final override fun onRender(bitmap: Bitmap?, position: Int) {
-        if (this.pagePosition == position && bitmap != null) {
+        if (this.mPagePosition == position && bitmap != null) {
             pdfRenderer.put(position, bitmap)
             activity.runOnUiThread {
                 displayPage(bitmap, position)
@@ -35,9 +35,9 @@ abstract class PdfPageViewHolder(view: View, val pdfRenderer: PdfRendererProxy, 
     }
 
     final override fun bind(position: Int) {
-        pagePosition = position
+        mPagePosition = position
         displayPlaceHolder()
-        getPage(pagePosition)
+        getPage(mPagePosition)
         resizePage()
     }
 }

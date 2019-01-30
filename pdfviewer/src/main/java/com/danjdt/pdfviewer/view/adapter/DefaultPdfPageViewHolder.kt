@@ -7,13 +7,13 @@ import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import com.danjdt.pdfviewer.R
-import com.danjdt.pdfviewer.renderer.PdfRendererProxy
+import com.danjdt.pdfviewer.interfaces.PdfRendererInterface
 
 /**
  * Created by daniel.teixeira on 25/01/19
  */
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class DefaultPdfPageViewHolder(view: View, pdfRenderer: PdfRendererProxy, pageSize: Size?) :
+class DefaultPdfPageViewHolder(view: View, pdfRenderer: PdfRendererInterface, pageSize: Size?) :
     PdfPageViewHolder(view, pdfRenderer, pageSize) {
 
     private val image: ImageView = itemView.findViewById(R.id.image)
@@ -30,7 +30,7 @@ class DefaultPdfPageViewHolder(view: View, pdfRenderer: PdfRendererProxy, pageSi
     }
 
     override fun getPage(position: Int) {
-        pdfRenderer.get(this, pagePosition)
+        pdfRenderer.get(this, mPagePosition)
     }
 
     override fun displayPlaceHolder() {

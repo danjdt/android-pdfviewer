@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< Updated upstream
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/rootView"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 </FrameLayout>
+=======
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:id="@+id/rootView"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"/>
+
+
+    <FrameLayout android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentBottom="true"
+                 android:layout_alignParentEnd="true"
+                 android:layout_margin="@dimen/default_margin"
+                 android:padding="4dp"
+                 android:background="@drawable/background_page_counter">
+
+        <TextView android:id="@+id/tvCounter"
+                  android:layout_width="wrap_content"
+                  android:minWidth="48dp"
+                  android:gravity="center"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+</RelativeLayout>
+>>>>>>> Stashed changes

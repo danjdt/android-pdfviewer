@@ -20,15 +20,24 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
             .view(PdfViewerRecyclerView(this))
             .setMaxZoom(3f)
             .setZoomEnabled(true)
+<<<<<<< Updated upstream
             .quality(PdfPageQuality.QUALITY_AUTO)
+=======
+            .quality(PdfPageQuality.QUALITY_1080)
+>>>>>>> Stashed changes
             .setOnErrorListener(this)
             .setOnPageChangedListener(this)
             .build()
             .load(R.raw.sample)
     }
 
+<<<<<<< Updated upstream
     override fun onPageChanged(page: Int) {
 
+=======
+    override fun onPageChanged(page: Int, total: Int) {
+        tvCounter.text = getString(R.string.pdf_page_counter, page, total)
+>>>>>>> Stashed changes
     }
 
     override fun onFileLoadError(e: Exception) {
