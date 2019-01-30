@@ -11,6 +11,11 @@ implementation 'com.danjdt:pdfviewer:0.1.0'
 
 ```
 
+|     Scroll    |     Zoom      |
+| ------------- | ------------- |
+| ![](gif1.gif) |![](git2.gif)  |
+
+
 ## How to use
 
 ``` kotlin
@@ -88,11 +93,7 @@ and
     }
     
 ```
-<<<<<<< Updated upstream
-then, 
-=======
 then
->>>>>>> Stashed changes
 
 ``` kotlin
     val pdfRecyclerView = PdfViewerRecyclerView(context)
