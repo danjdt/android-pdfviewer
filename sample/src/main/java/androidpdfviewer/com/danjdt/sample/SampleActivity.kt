@@ -1,22 +1,26 @@
 package androidpdfviewer.com.danjdt.sample
 
 import android.os.Bundle
+import androidpdfviewer.com.danjdt.sample.databinding.ActivityMainBinding
 import androidx.appcompat.app.AppCompatActivity
 import com.danjdt.pdfviewer.PdfViewer
 import com.danjdt.pdfviewer.interfaces.OnErrorListener
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.utils.PdfPageQuality
 import com.danjdt.pdfviewer.view.PdfViewerRecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 import java.lang.Exception
 
 class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListener{
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        PdfViewer.Builder(rootView)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        PdfViewer.Builder(binding.rootView)
             .view(PdfViewerRecyclerView(this))
             .setMaxZoom(3f)
             .setZoomEnabled(true)
@@ -28,7 +32,7 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
     }
 
     override fun onPageChanged(page: Int, total: Int) {
-        tvCounter.text = getString(R.string.pdf_page_counter, page, total)
+        binding.tvCounter.text = getString(R.string.pdf_page_counter, page, total)
     }
 
     override fun onFileLoadError(e: Exception) {
