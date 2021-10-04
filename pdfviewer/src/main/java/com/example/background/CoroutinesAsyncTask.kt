@@ -4,7 +4,7 @@ import android.util.Log
 import kotlinx.coroutines.*
 import java.util.concurrent.Executors
 
-abstract class CoroutinesAsyncTask<Params, Progress, Result>(val taskName: String) {
+abstract class CoroutinesAsyncTask<Params, Progress, Result>(val taskName: String? = null) {
 
     val TAG by lazy {
         CoroutinesAsyncTask::class.java.simpleName
@@ -16,8 +16,8 @@ abstract class CoroutinesAsyncTask<Params, Progress, Result>(val taskName: Strin
 
     var status: Status = Status.PENDING
     var preJob: Job? = null
-    var bgJob: Deferred<Result>? = null
-    abstract fun doInBackground(vararg params: Params?): Result
+    var bgJob: Deferred<Result?>? = null
+    abstract fun doInBackground(vararg params: Params?): Result?
     open fun onProgressUpdate(vararg values: Progress?) {}
     open fun onPostExecute(result: Result?) {}
     open fun onPreExecute() {}
@@ -109,6 +109,6 @@ abstract class CoroutinesAsyncTask<Params, Progress, Result>(val taskName: Strin
     }
 
     private fun printLog(message: String) {
-        Log.d(TAG, message)
+        taskName?.let { Log.d(TAG, message) }
     }
 }
