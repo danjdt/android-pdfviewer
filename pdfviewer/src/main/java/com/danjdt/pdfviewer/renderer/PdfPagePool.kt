@@ -11,7 +11,7 @@ class PdfPagePool {
 
     private val mPool: HashMap<Int, Bitmap?> = HashMap()
 
-    private val mRemoveQueue: Queue<Int> = LinkedList<Int>()
+    private val mRemoveQueue: Queue<Int> = LinkedList()
 
     fun put(position: Int, bitmap: Bitmap) {
         if (mPool[position] == null) {
@@ -35,8 +35,9 @@ class PdfPagePool {
     }
 
     private fun removeLast() {
-        val removePos = mRemoveQueue.poll()
-        mPoolSizeInBytes -= mPool[removePos]!!.byteCount
-        mPool.remove(removePos)
+        mRemoveQueue.poll()?.let { removePos ->
+            mPoolSizeInBytes -= mPool[removePos]!!.byteCount
+            mPool.remove(removePos)
+        }
     }
 }

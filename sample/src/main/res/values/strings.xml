@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Sample</string>
     <string name="pdf_page_counter">%d / %d</string>
+    <string name="open">Open file…</string>
 </resources>

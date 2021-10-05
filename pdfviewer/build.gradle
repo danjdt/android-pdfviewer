@@ -1,22 +1,25 @@
 apply plugin: 'com.android.library'
-
 apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
-
-apply plugin: 'com.github.dcendents.android-maven'
-
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 
     buildTypes {
@@ -31,66 +34,6 @@ android {
         }
     }
 
-    ext {
-        bintrayRepo = 'maven'
-        bintrayName = 'pdfviewer'
-
-        publishedGroupId = 'com.danjdt'
-        libraryName = 'PDFViewer'
-        artifact = 'pdfviewer'
-
-        libraryDescription = 'A Android PDF Viewer that render pdf using PdfRenderer and displays it in a RecyclerView.'
-
-        siteUrl = 'https://github.com/danjdt/android-pdfviewer'
-        gitUrl = 'https://github.com/danjdt/android-pdfviewer.git'
-
-        libraryVersion = '0.1.0'
-
-        developerId = 'danjdt'
-        developerName = 'Daniel José Dias Teixeira'
-        developerEmail = 'daniel.jd.teixeira@gmail.com'
-
-        licenseName = 'The Apache Software License, Version 2.0'
-        licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-        allLicenses = ["Apache-2.0"]
-    }
-
-    group = publishedGroupId
-    version = libraryVersion
-
-    install {
-        repositories.mavenInstaller {
-            pom.project {
-                packaging 'aar'
-                groupId publishedGroupId
-                artifactId artifact
-
-                name libraryName
-                description libraryDescription
-                url siteUrl
-
-                licenses {
-                    license {
-                        name licenseName
-                        url licenseUrl
-                    }
-                }
-                developers {
-                    developer {
-                        id developerId
-                        name developerName
-                        email developerEmail
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-
     task sourcesJar(type: Jar) {
         classifier = 'sources'
         from android.sourceSets.main.java.srcDirs
@@ -99,41 +42,12 @@ android {
     artifacts {
         archives sourcesJar
     }
-
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-    bintray {
-        user = properties.getProperty("bintray.user")
-        key = properties.getProperty("bintray.apikey")
-
-        configurations = ['archives']
-        pkg {
-            repo = bintrayRepo
-            name = bintrayName
-            desc = libraryDescription
-            websiteUrl = siteUrl
-            vcsUrl = gitUrl
-            licenses = allLicenses
-            dryRun = false
-            publish = true
-            override = true
-            publicDownloadNumbers = true
-            version {
-                desc = libraryDescription
-            }
-        }
-    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api 'androidx.appcompat:appcompat:1.1.0-alpha01'
-    api 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
-    api 'androidx.core:core-ktx:1.1.0-alpha03'
+    compileOnly 'androidx.recyclerview:recyclerview:1.2.1'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
