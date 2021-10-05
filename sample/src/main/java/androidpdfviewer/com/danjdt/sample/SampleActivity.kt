@@ -57,6 +57,7 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_LOAD && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
+                binding.rootView.removeAllViews()
                 PdfViewer.Builder(binding.rootView)
                     .view(PdfViewerRecyclerView(this))
                     .setMaxZoom(3f)
