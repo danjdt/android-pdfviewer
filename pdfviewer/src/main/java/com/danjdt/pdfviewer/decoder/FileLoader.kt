@@ -38,6 +38,11 @@ class FileLoader {
             LoadFileFromUrlAsyncTask(getTempFile(context), listener, url).execute()
         }
 
+        fun loadFile(context: Context, listener: OnLoadFileListener, uri: Uri) {
+            val input = context.contentResolver.openInputStream(uri)
+            input?.let { LoadFileFromInputStreamAsyncTask(getTempFile(context), listener, input).execute() }
+        }
+
         fun loadFile(context: Context, listener: OnLoadFileListener, input: InputStream) {
             LoadFileFromInputStreamAsyncTask(getTempFile(context), listener, input).execute()
         }

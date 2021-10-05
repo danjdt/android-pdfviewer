@@ -2,6 +2,7 @@ package com.danjdt.pdfviewer
 
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,10 @@ class PdfViewer private constructor(private val mRootView: ViewGroup) : OnLoadFi
 
     fun load(input: InputStream) {
         FileLoader.loadFile(mContext, this, input)
+    }
+
+    fun load(uri: Uri) {
+        FileLoader.loadFile(mContext, this, uri)
     }
 
     fun load(url: String) {
