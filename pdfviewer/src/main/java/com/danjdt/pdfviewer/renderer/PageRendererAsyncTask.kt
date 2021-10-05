@@ -2,12 +2,12 @@ package com.danjdt.pdfviewer.renderer
 
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
+import android.os.AsyncTask
 import android.os.Build
 import android.util.Size
 import androidx.annotation.RequiresApi
 
 import com.danjdt.pdfviewer.interfaces.PdfRendererListener
-import com.example.background.CoroutinesAsyncTask
 import java.io.IOException
 
 /**
@@ -19,7 +19,7 @@ class PageRendererAsyncTask(
     private val pdfRenderer: PdfRenderer,
     private val position: Int,
     private val size: Size
-) : CoroutinesAsyncTask<Void, Void, Bitmap>() {
+) : AsyncTask<Void, Void, Bitmap>() {
 
     init {
         execute()
@@ -45,7 +45,7 @@ class PageRendererAsyncTask(
         return bitmap
     }
 
-    override fun doInBackground(vararg params: Void?): Bitmap? {
+    override fun doInBackground(vararg v: Void): Bitmap? {
         //Sleep thread for a while then asks if the ViewHolder position is still the same
         //If true render de pdf page, else cancel the async task
         //This is a workaround to render only the necessary bitmaps
