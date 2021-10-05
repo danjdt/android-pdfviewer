@@ -1,6 +1,7 @@
 package com.danjdt.pdfviewer.decoder
 
 import android.content.Context
+import android.net.Uri
 import androidx.annotation.RawRes
 import com.danjdt.pdfviewer.interfaces.OnLoadFileListener
 import java.io.File
@@ -30,7 +31,7 @@ class FileLoader {
                         )
                 )
 
-            LoadFileFromResAsyncTask(getTempFile(context), listener, input).execute()
+            LoadFileFromInputStreamAsyncTask(getTempFile(context), listener, input).execute()
         }
 
         fun loadFile(context: Context, listener: OnLoadFileListener, url: String) {
