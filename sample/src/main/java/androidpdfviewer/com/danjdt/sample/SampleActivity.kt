@@ -2,6 +2,7 @@ package androidpdfviewer.com.danjdt.sample
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.TextView
 import androidpdfviewer.com.danjdt.sample.databinding.ActivityMainBinding
 import androidx.appcompat.app.AppCompatActivity
 import com.danjdt.pdfviewer.PdfViewer
@@ -12,7 +13,7 @@ import com.danjdt.pdfviewer.view.PdfViewerRecyclerView
 import java.io.IOException
 import java.lang.Exception
 
-class SampleActivity : AppCompatActivity(R.layout.activity_main), OnPageChangedListener , OnErrorListener{
+class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListener{
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(LayoutInflater.from(this))
@@ -20,6 +21,7 @@ class SampleActivity : AppCompatActivity(R.layout.activity_main), OnPageChangedL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
         PdfViewer.Builder(binding.rootView)
             .view(PdfViewerRecyclerView(this))
             .setMaxZoom(3f)
