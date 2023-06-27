@@ -1,19 +1,20 @@
 package com.danjdt.pdfviewer.interfaces
 
+import android.view.View
+import com.danjdt.pdfviewer.utils.PdfPageQuality
 import java.io.File
 
-/**
- * Created by daniel.teixeira on 22/01/19
- */
 interface PdfViewInterface {
+
+    fun getView(): View
 
     fun setup(file: File)
 
-    fun setZoomEnabled(isZoomEnabled : Boolean)
+    fun setZoomEnabled(isZoomEnabled: Boolean)
 
-    fun setMaxZoom(maxZoom : Float)
+    fun setMaxZoom(maxZoom: Float)
 
-    fun setQuality(quality: Int)
+    fun setQuality(quality: PdfPageQuality)
 
     fun setOnPageChangedListener(onPageChangedListener: OnPageChangedListener?)
 }

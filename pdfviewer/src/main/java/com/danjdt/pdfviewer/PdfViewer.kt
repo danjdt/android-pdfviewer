@@ -2,49 +2,46 @@ package com.danjdt.pdfviewer
 
 import android.app.Activity
 import android.content.Context
-import android.os.Build
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.MainThread
 import androidx.annotation.RawRes
-import androidx.annotation.RequiresApi
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.danjdt.pdfviewer.decoder.FileLoader
 import com.danjdt.pdfviewer.interfaces.OnLoadFileListener
 import com.danjdt.pdfviewer.interfaces.OnErrorListener
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.interfaces.PdfViewInterface
 import com.danjdt.pdfviewer.utils.PdfPageQuality
-import com.danjdt.pdfviewer.utils.Utils
 import com.danjdt.pdfviewer.view.PdfViewerRecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.lang.Exception
 
+class PdfViewer private constructor(
+    private val rootView: ViewGroup,
+    private val pdfView: PdfViewInterface,
+    private val errorListener: OnErrorListener? = null
+) : OnLoadFileListener {
 
-/**
- * Created by daniel.teixeira on 10/01/19
- */
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class PdfViewer private constructor(private val mRootView: ViewGroup) : OnLoadFileListener {
+    private val context: Context by lazy { rootView.context }
 
-    private var mContext = mRootView.context
-
-    private lateinit var mView: PdfViewInterface
-
-    private var mOnErrorListener: OnErrorListener? = null
-
-    @MainThread
     private fun display(file: File) {
         try {
-            mRootView.addView(mView as View)
-            mView.setup(file)
-
+            rootView.addView(pdfView.getView())
+            pdfView.setup(file)
         } catch (e: IOException) {
-            mOnErrorListener?.onPdfRendererError(e)
+            errorListener?.onPdfRendererError(e)
 
         } catch (e: Exception) {
-            mOnErrorListener?.onAttachViewError(e)
+            errorListener?.onAttachViewError(e)
         }
     }
 
@@ -53,30 +50,57 @@ class PdfViewer private constructor(private val mRootView: ViewGroup) : OnLoadFi
     }
 
     fun load(@RawRes resId: Int) {
-        FileLoader.loadFile(mContext, this, resId)
+        CoroutineScope(Dispatchers.Main).launch {
+            FileLoader.loadFile(context, resId)
+                .flowOn(Dispatchers.IO)
+                .catch {
+                    errorListener?.onFileLoadError(Exception())
+                }
+                .collect {
+                    display(it)
+                }
+        }
     }
 
     fun load(input: InputStream) {
-        FileLoader.loadFile(mContext, this, input)
+        CoroutineScope(Dispatchers.Main).launch {
+            FileLoader.loadFile(context, input)
+                .flowOn(Dispatchers.IO)
+                .catch {
+                    errorListener?.onFileLoadError(Exception())
+                }
+                .collect {
+                    display(it)
+                }
+        }
     }
 
     fun load(url: String) {
-        FileLoader.loadFile(mContext, this, url)
+        CoroutineScope(Dispatchers.Main).launch {
+            FileLoader.loadFile(context, url)
+                .flowOn(Dispatchers.IO)
+                .catch {
+                    errorListener?.onFileLoadError(Exception())
+                }
+                .collect {
+                    display(it)
+                }
+        }
     }
 
     override fun onFileLoaded(file: File) {
-        (mContext as Activity).runOnUiThread {
+        (context as Activity).runOnUiThread {
             display(file)
         }
     }
 
     override fun onFileLoadError(e: Exception) {
-        mOnErrorListener?.onFileLoadError(e)
+        errorListener?.onFileLoadError(e)
     }
 
-    class Builder(private val rootView: View) {
+    class Builder(private val rootView: ViewGroup) {
 
-        private var context: Context = rootView.context
+        private val context: Context = rootView.context
 
         private var pdfView: PdfViewInterface = PdfViewerRecyclerView(context)
 
@@ -90,44 +114,42 @@ class PdfViewer private constructor(private val mRootView: ViewGroup) : OnLoadFi
 
         private var onErrorListener: OnErrorListener? = null
 
-        fun view(pdfView: PdfViewInterface): PdfViewer.Builder {
+        fun view(pdfView: PdfViewInterface): Builder {
             this.pdfView = pdfView
             return this
         }
 
-        fun setZoomEnabled(isEnabled: Boolean): PdfViewer.Builder {
+        fun setZoomEnabled(isEnabled: Boolean): Builder {
             this.isZoomEnabled = isEnabled
             return this
         }
 
-        fun setMaxZoom(maxZoom: Float): PdfViewer.Builder {
+        fun setMaxZoom(maxZoom: Float): Builder {
             this.maxZoom = maxZoom
             return this
         }
 
-        fun setOnPageChangedListener(onPageChangedListener: OnPageChangedListener): PdfViewer.Builder {
+        fun setOnPageChangedListener(onPageChangedListener: OnPageChangedListener): Builder {
             this.onPageChangedListener = onPageChangedListener
             return this
         }
 
-        fun quality(quality: PdfPageQuality): PdfViewer.Builder {
+        fun quality(quality: PdfPageQuality): Builder {
             this.quality = quality
             return this
         }
 
-        fun setOnErrorListener(onErrorListener: OnErrorListener): PdfViewer.Builder {
+        fun setOnErrorListener(onErrorListener: OnErrorListener): Builder {
             this.onErrorListener = onErrorListener
             return this
         }
 
         fun build(): PdfViewer {
-            val pdfViewer = PdfViewer(rootView as ViewGroup)
-            pdfView.setQuality(quality.value)
+            val pdfViewer = PdfViewer(rootView, pdfView, onErrorListener)
+            pdfView.setQuality(quality)
             pdfView.setZoomEnabled(isZoomEnabled)
             pdfView.setMaxZoom(maxZoom)
             pdfView.setOnPageChangedListener(onPageChangedListener)
-            pdfViewer.mOnErrorListener = onErrorListener
-            pdfViewer.mView = pdfView
             return pdfViewer
         }
     }
