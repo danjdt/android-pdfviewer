@@ -2,18 +2,17 @@ package androidpdfviewer.com.danjdt.sample
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.TextView
 import androidpdfviewer.com.danjdt.sample.databinding.ActivityMainBinding
 import androidx.appcompat.app.AppCompatActivity
 import com.danjdt.pdfviewer.PdfViewer
 import com.danjdt.pdfviewer.interfaces.OnErrorListener
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.utils.PdfPageQuality
-import com.danjdt.pdfviewer.view.PdfViewerRecyclerView
+import com.danjdt.pdfviewer.view.PdfViewControllerImpl
 import java.io.IOException
 import java.lang.Exception
 
-class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListener{
+class SampleActivity : AppCompatActivity(), OnPageChangedListener, OnErrorListener {
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(LayoutInflater.from(this))
@@ -22,15 +21,20 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        PdfViewer.Builder(binding.rootView)
-            .view(PdfViewerRecyclerView(this))
+        val pdfViewer = PdfViewer.Builder(binding.rootView)
+            .controller(PdfViewControllerImpl(this))
             .setMaxZoom(3f)
             .setZoomEnabled(true)
             .quality(PdfPageQuality.QUALITY_1080)
             .setOnErrorListener(this)
             .setOnPageChangedListener(this)
             .build()
-            .load(R.raw.sample)
+
+        pdfViewer.load(R.raw.sample)
+
+        binding.tvCounter.setOnClickListener {
+            pdfViewer.goToPosition(position = 7)
+        }
     }
 
     override fun onPageChanged(page: Int, total: Int) {

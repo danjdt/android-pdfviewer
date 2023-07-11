@@ -4,7 +4,7 @@ import android.view.View
 import com.danjdt.pdfviewer.utils.PdfPageQuality
 import java.io.File
 
-interface PdfViewInterface {
+interface PdfViewController {
 
     fun getView(): View
 
@@ -17,4 +17,6 @@ interface PdfViewInterface {
     fun setQuality(quality: PdfPageQuality)
 
     fun setOnPageChangedListener(onPageChangedListener: OnPageChangedListener?)
+
+    fun goToPosition(position: Int)
 }
