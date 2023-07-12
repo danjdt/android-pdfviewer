@@ -31,10 +31,6 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener, OnErrorListen
             .build()
 
         pdfViewer.load(R.raw.sample)
-
-        binding.tvCounter.setOnClickListener {
-            pdfViewer.goToPosition(position = 7)
-        }
     }
 
     override fun onPageChanged(page: Int, total: Int) {

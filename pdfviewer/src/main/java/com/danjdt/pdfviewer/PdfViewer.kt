@@ -18,10 +18,10 @@ import java.io.InputStream
 import java.lang.Exception
 
 class PdfViewer private constructor(
-    pdfView: PdfViewController,
+    pdfViewController: PdfViewController,
     rootView: ViewGroup,
     private val errorListener: OnErrorListener? = null
-) : PdfViewController by pdfView {
+) : PdfViewController by pdfViewController {
 
     private val context: Context by lazy { rootView.context }
 
