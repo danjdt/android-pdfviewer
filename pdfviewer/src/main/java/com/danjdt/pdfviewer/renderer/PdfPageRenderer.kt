@@ -36,8 +36,6 @@ class PdfPageRenderer(private val file: File, private val quality: PdfPageQualit
                 withContext(Dispatchers.Main) {
                     onPageRendered(it)
                 }
-            }.onFailure {
-                // LOG ERROR
             }
         }
     }
