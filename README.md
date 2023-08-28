@@ -4,6 +4,8 @@ This code will not be published as a library, but you can use it as you want in 
 
 - Requires API Level 21
 
+## Sample
+
 |     Scroll    |     Zoom      |
 | ------------- | ------------- |
 | ![](gif1.gif) |![](git2.gif)  |
