@@ -1,5 +1,5 @@
 # Android PDFViewer
-A Android PDF Viewer that render pdf using `PdfRenderer` + `kotlin-coroutines` and displays it in a `RecyclerView`.
+A Android PDF Viewer that render pdf using `PdfRenderer` + `kotlin coroutines` and displays it in a `RecyclerView`.
 
 **- This code will not be published as a library, but you can use it as you want.**
 
