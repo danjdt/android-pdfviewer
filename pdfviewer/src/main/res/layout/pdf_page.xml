@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--TODO MELHORAR-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:orientation="vertical"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:background="#fafafa"
-             android:padding="4dp">
+             android:layout_height="wrap_content">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:background="@android:color/white"
-            android:contentDescription="pdfPage"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 </RelativeLayout>

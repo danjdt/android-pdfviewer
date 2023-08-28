@@ -1,26 +1,24 @@
 package com.danjdt.pdfviewer.view.adapter
 
-import android.content.Context
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
-import com.danjdt.pdfviewer.R
+import com.danjdt.pdfviewer.databinding.PdfPageBinding
+import com.danjdt.pdfviewer.utils.PdfPageQuality
+import java.io.File
 
-/**
- * Created by daniel.teixeira on 15/01/19
- */
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class DefaultPdfPageAdapter(private val context: Context) :
-    PdfPageAdapter<DefaultPdfPageViewHolder>() {
+class DefaultPdfPageAdapter(
+    file: File,
+    quality: PdfPageQuality
+) : PdfPagesAdapter<DefaultPdfPageViewHolder>(file, quality) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultPdfPageViewHolder {
-        val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.pdf_page, parent, false)
-        return DefaultPdfPageViewHolder(view, mPdfRenderer, mPageSize)
+        val view = PdfPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).root
+        return DefaultPdfPageViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: DefaultPdfPageViewHolder, position: Int) {
-        holder.bind(position)
+        renderPage(position) {
+            holder.bind(it)
+        }
     }
 }
