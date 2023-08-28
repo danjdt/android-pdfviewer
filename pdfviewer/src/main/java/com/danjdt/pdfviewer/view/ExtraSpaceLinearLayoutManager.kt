@@ -1,17 +1,18 @@
 package com.danjdt.pdfviewer.view
 
-import android.app.Activity
 import android.content.Context
+import android.graphics.Canvas
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
+import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.danjdt.pdfviewer.utils.Utils
 
-/**
- * Created by daniel.teixeira on 20/01/19
- */
-class ExtraSpaceLinearLayoutManager(private val context: Context?) : LinearLayoutManager(context) {
+class ExtraSpaceLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
 
-    override fun getExtraLayoutSpace(state: RecyclerView.State?): Int {
-        return Utils.getScreenHeight(context as Activity)
+    var isScrollEnabled = true
+
+    override fun canScrollVertically(): Boolean {
+        return super.canScrollVertically() && isScrollEnabled
     }
 }
