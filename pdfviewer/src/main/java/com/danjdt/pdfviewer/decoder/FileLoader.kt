@@ -1,50 +1,67 @@
 package com.danjdt.pdfviewer.decoder
 
 import android.content.Context
+import android.content.res.Resources.NotFoundException
 import android.net.Uri
 import androidx.annotation.RawRes
 import com.danjdt.pdfviewer.interfaces.OnLoadFileListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.InputStream
+import java.net.URL
 
-/**
- * Created by daniel.teixeira on 23/01/19
- */
 class FileLoader {
 
     companion object {
 
-        private const val FILE_NAME = "pdfView.pdf"
+        private const val FILE_NAME = "temp.pdf"
 
-        private fun getTempFile(context : Context) : File {
+        private fun getTempFile(context: Context): File {
             return File(context.cacheDir, FILE_NAME)
         }
 
-        fun loadFile(context: Context, listener: OnLoadFileListener, @RawRes resId: Int) {
-            val input = context.resources
-                .openRawResource(
-                    context.resources
-                        .getIdentifier(
-                            context.resources.getResourceName(resId),
-                            context.resources.getResourceTypeName(resId),
-                            context.resources.getResourcePackageName(resId)
-                        )
-                )
+        suspend fun loadFile(context: Context, @RawRes resId: Int): File {
+            return withContext(Dispatchers.IO) {
+                val input = context.resources
+                    .openRawResource(
+                        context.resources
+                            .getIdentifier(
+                                context.resources.getResourceName(resId),
+                                context.resources.getResourceTypeName(resId),
+                                context.resources.getResourcePackageName(resId)
+                            )
+                    )
 
-            LoadFileFromInputStreamAsyncTask(getTempFile(context), listener, input).execute()
+                LoadFileDelegate(input = input, file = getTempFile(context)).doLoadFile()
+            }
         }
 
-        fun loadFile(context: Context, listener: OnLoadFileListener, url: String) {
-            LoadFileFromUrlAsyncTask(getTempFile(context), listener, url).execute()
+        suspend fun loadFile(context: Context, url: String): File {
+            return withContext(Dispatchers.IO) {
+                val imageUrl = URL(url)
+                val urlConnection = imageUrl.openConnection()
+                val input = urlConnection.getInputStream()
+                LoadFileDelegate(input = input, file = getTempFile(context)).doLoadFile()
+            }
         }
 
-        fun loadFile(context: Context, listener: OnLoadFileListener, uri: Uri) {
-            val input = context.contentResolver.openInputStream(uri)
-            input?.let { LoadFileFromInputStreamAsyncTask(getTempFile(context), listener, input).execute() }
+        suspend fun loadFile(context: Context, input: InputStream): File {
+            return withContext(Dispatchers.IO) {
+                LoadFileDelegate(input = input, file = getTempFile(context)).doLoadFile()
+            }
         }
 
-        fun loadFile(context: Context, listener: OnLoadFileListener, input: InputStream) {
-            LoadFileFromInputStreamAsyncTask(getTempFile(context), listener, input).execute()
+        suspend fun loadFile(context: Context,  uri: Uri): File {
+            return withContext(Dispatchers.IO) {
+                val input = context.contentResolver.openInputStream(uri)
+                input?.let {
+                    LoadFileDelegate(input = input, file = getTempFile(context)).doLoadFile()
+                } ?: throw FileNotFoundException()
+            }
         }
     }
 }
