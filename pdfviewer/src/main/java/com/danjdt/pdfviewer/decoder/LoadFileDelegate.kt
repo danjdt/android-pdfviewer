@@ -4,9 +4,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
-/**
- * Created by daniel.teixeira on 23/01/19
- */
 class LoadFileDelegate(private val input: InputStream, private val file: File) {
 
     fun doLoadFile(): File {
