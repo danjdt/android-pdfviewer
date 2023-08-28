@@ -1,6 +1,8 @@
 package com.danjdt.pdfviewer.decoder
 
 import android.content.Context
+import android.content.res.Resources.NotFoundException
+import android.net.Uri
 import androidx.annotation.RawRes
 import com.danjdt.pdfviewer.interfaces.OnLoadFileListener
 import kotlinx.coroutines.Dispatchers
@@ -8,6 +10,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.InputStream
 import java.net.URL
 
@@ -49,6 +52,15 @@ class FileLoader {
         suspend fun loadFile(context: Context, input: InputStream): File {
             return withContext(Dispatchers.IO) {
                 LoadFileDelegate(input = input, file = getTempFile(context)).doLoadFile()
+            }
+        }
+
+        suspend fun loadFile(context: Context,  uri: Uri): File {
+            return withContext(Dispatchers.IO) {
+                val input = context.contentResolver.openInputStream(uri)
+                input?.let {
+                    LoadFileDelegate(input = input, file = getTempFile(context)).doLoadFile()
+                } ?: throw FileNotFoundException()
             }
         }
     }

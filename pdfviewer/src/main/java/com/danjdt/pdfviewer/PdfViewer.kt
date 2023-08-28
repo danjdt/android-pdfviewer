@@ -1,6 +1,7 @@
 package com.danjdt.pdfviewer
 
 import android.content.Context
+import android.net.Uri
 import android.view.ViewGroup
 import androidx.annotation.RawRes
 import com.danjdt.pdfviewer.decoder.FileLoader
@@ -45,6 +46,18 @@ class PdfViewer private constructor(
 
     fun load(file: File) {
         display(file)
+    }
+
+    fun load(uri: Uri) {
+        CoroutineScope(Dispatchers.Main).launch {
+            runCatching {
+                FileLoader.loadFile(context, uri)
+            }.onFailure {
+                errorListener?.onFileLoadError(Exception())
+            }.onSuccess {
+                display(it)
+            }
+        }
     }
 
     fun load(@RawRes resId: Int) {

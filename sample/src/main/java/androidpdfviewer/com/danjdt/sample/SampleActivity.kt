@@ -11,7 +11,6 @@ import com.danjdt.pdfviewer.PdfViewer
 import com.danjdt.pdfviewer.interfaces.OnErrorListener
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.utils.PdfPageQuality
-import com.danjdt.pdfviewer.view.PdfViewerRecyclerView
 import java.io.IOException
 
 
@@ -26,7 +25,6 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
         setContentView(binding.root)
 
         PdfViewer.Builder(binding.rootView)
-            .view(PdfViewerRecyclerView(this))
             .setMaxZoom(3f)
             .setZoomEnabled(true)
             .quality(PdfPageQuality.QUALITY_1080)
@@ -59,7 +57,6 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
             data?.data?.let { uri ->
                 binding.rootView.removeAllViews()
                 PdfViewer.Builder(binding.rootView)
-                    .view(PdfViewerRecyclerView(this))
                     .setMaxZoom(3f)
                     .setZoomEnabled(true)
                     .quality(PdfPageQuality.QUALITY_1080)
