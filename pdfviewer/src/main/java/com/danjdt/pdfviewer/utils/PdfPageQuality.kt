@@ -1,8 +1,5 @@
 package com.danjdt.pdfviewer.utils
 
-/**
- * Created by daniel.teixeira on 21/01/19
- */
 enum class PdfPageQuality(val value : Int) {
     QUALITY_160(160),
     QUALITY_320(320),

@@ -16,7 +16,7 @@ A Android PDF Viewer that render pdf using `PdfRenderer` + `kotlin-coroutines` a
 ### Setup options
 ``` kotlin
     PdfViewer.Builder(rootView)
-      .view(view)
+      .controller(PdfViewController)
       .quality(PdfPageQuality)
       .setZoomEnabled(true)
       .setMaxZoom(3f)
