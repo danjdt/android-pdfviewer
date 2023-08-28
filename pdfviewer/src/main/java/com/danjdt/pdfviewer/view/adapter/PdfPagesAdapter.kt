@@ -1,14 +1,10 @@
 package com.danjdt.pdfviewer.view.adapter
 
 import android.graphics.Bitmap
-import android.graphics.pdf.PdfRenderer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.danjdt.pdfviewer.renderer.PdfPageRenderer
 import com.danjdt.pdfviewer.utils.PdfPageQuality
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.File
 
 abstract class PdfPagesAdapter<T : PdfPageViewHolder>(
