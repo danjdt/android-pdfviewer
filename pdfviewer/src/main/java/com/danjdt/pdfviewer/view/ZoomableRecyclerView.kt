@@ -116,7 +116,7 @@ class ZoomableRecyclerView @JvmOverloads constructor(
     private inner class GestureListener : SimpleOnGestureListener() {
         override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
             if (!isScaling) {
-                if (scaleFactor > 1) {
+                if (scaleFactor > MIN_ZOOM) {
                     val newTranX = tranX - distanceX
                     tranX = newTranX.coerceIn(-maxTranX, 0f)
                     val newTranY = tranY - distanceY
