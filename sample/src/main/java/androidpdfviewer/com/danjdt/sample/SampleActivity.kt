@@ -7,10 +7,12 @@ import android.view.Menu
 import android.view.MenuItem
 import androidpdfviewer.com.danjdt.sample.databinding.ActivityMainBinding
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.danjdt.pdfviewer.PdfViewer
 import com.danjdt.pdfviewer.interfaces.OnErrorListener
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.utils.PdfPageQuality
+import kotlinx.coroutines.Dispatchers
 import java.io.IOException
 
 
@@ -24,12 +26,13 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        PdfViewer.Builder(binding.rootView)
+        PdfViewer.Builder(binding.rootView, lifecycleScope)
             .setMaxZoom(3f)
             .setZoomEnabled(true)
             .quality(PdfPageQuality.QUALITY_1080)
             .setOnErrorListener(this)
             .setOnPageChangedListener(this)
+            .setRenderDispatcher(Dispatchers.Default)
             .build()
             .load(R.raw.sample)
     }
@@ -56,12 +59,13 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
         if (requestCode == REQUEST_CODE_LOAD && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
                 binding.rootView.removeAllViews()
-                PdfViewer.Builder(binding.rootView)
+                PdfViewer.Builder(binding.rootView, lifecycleScope)
                     .setMaxZoom(3f)
                     .setZoomEnabled(true)
                     .quality(PdfPageQuality.QUALITY_1080)
                     .setOnErrorListener(this)
                     .setOnPageChangedListener(this)
+                    .setRenderDispatcher(Dispatchers.Default)
                     .build()
                     .load(uri)
             }

@@ -10,6 +10,7 @@ import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.interfaces.PdfViewController
 import com.danjdt.pdfviewer.utils.PdfPageQuality
 import com.danjdt.pdfviewer.view.PdfViewControllerImpl
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +22,7 @@ import java.lang.Exception
 class PdfViewer private constructor(
     pdfViewController: PdfViewController,
     rootView: ViewGroup,
+    private var scope: CoroutineScope,
     private val errorListener: OnErrorListener? = null
 ) : PdfViewController by pdfViewController {
 
@@ -49,7 +51,7 @@ class PdfViewer private constructor(
     }
 
     fun load(uri: Uri) {
-        CoroutineScope(Dispatchers.Main).launch {
+        scope.launch(Dispatchers.Main.immediate) {
             runCatching {
                 FileLoader.loadFile(context, uri)
             }.onFailure {
@@ -61,7 +63,7 @@ class PdfViewer private constructor(
     }
 
     fun load(@RawRes resId: Int) {
-        CoroutineScope(Dispatchers.Main).launch {
+        scope.launch(Dispatchers.Main.immediate) {
             runCatching {
                 FileLoader.loadFile(context, resId)
             }.onFailure {
@@ -73,7 +75,7 @@ class PdfViewer private constructor(
     }
 
     fun load(input: InputStream) {
-        CoroutineScope(Dispatchers.Main).launch {
+        scope.launch(Dispatchers.Main.immediate) {
             runCatching {
                 FileLoader.loadFile(context, input)
             }.onFailure {
@@ -85,7 +87,7 @@ class PdfViewer private constructor(
     }
 
     fun load(url: String) {
-        CoroutineScope(Dispatchers.Main).launch {
+        scope.launch(Dispatchers.Main.immediate) {
             runCatching {
                 FileLoader.loadFile(context, url)
             }.onFailure {
@@ -96,11 +98,14 @@ class PdfViewer private constructor(
         }
     }
 
-    class Builder(private val rootView: ViewGroup) {
+    class Builder(
+        private val rootView: ViewGroup,
+        private val scope: CoroutineScope,
+    ) {
 
         private val context: Context = rootView.context
 
-        private var pdfViewController: PdfViewController = PdfViewControllerImpl(context)
+        private var pdfViewController: PdfViewController = PdfViewControllerImpl(context, scope)
 
         private var quality: PdfPageQuality = PdfPageQuality.QUALITY_1080
 
@@ -111,6 +116,8 @@ class PdfViewer private constructor(
         private var onPageChangedListener: OnPageChangedListener? = null
 
         private var onErrorListener: OnErrorListener? = null
+
+        private var dispatcher: CoroutineDispatcher = Dispatchers.IO
 
         fun controller(controller: PdfViewController): Builder {
             this.pdfViewController = controller
@@ -142,12 +149,18 @@ class PdfViewer private constructor(
             return this
         }
 
+        fun setRenderDispatcher(dispatcher: CoroutineDispatcher): Builder {
+            this.dispatcher = dispatcher
+            return this
+        }
+
         fun build(): PdfViewer {
-            val pdfViewer = PdfViewer(pdfViewController, rootView, onErrorListener)
+            val pdfViewer = PdfViewer(pdfViewController, rootView, scope, onErrorListener)
             pdfViewController.setQuality(quality)
             pdfViewController.setZoomEnabled(isZoomEnabled)
             pdfViewController.setMaxZoom(maxZoom)
             pdfViewController.setOnPageChangedListener(onPageChangedListener)
+            pdfViewController.setDispatcher(dispatcher)
             return pdfViewer
         }
     }

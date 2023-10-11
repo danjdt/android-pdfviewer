@@ -8,20 +8,25 @@ import com.danjdt.pdfviewer.view.adapter.DefaultPdfPageAdapter
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.interfaces.PdfViewController
 import com.danjdt.pdfviewer.utils.PdfPageQuality
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.io.File
 
 class PdfViewControllerImpl(
-    context: Context
+    context: Context,
+    private val scope: CoroutineScope,
 ) : PdfViewController {
 
     private var view: ZoomableRecyclerView = ZoomableRecyclerView(context)
     private var pageQuality: PdfPageQuality = PdfPageQuality.QUALITY_1080
     private var onPageChangedListener: OnPageChangedListener? = null
+    private var dispatcher: CoroutineDispatcher = Dispatchers.IO
     private var lastVisiblePosition = -1
 
     override fun setup(file: File) {
         file.deleteOnExit()
-        view.adapter = DefaultPdfPageAdapter(file, pageQuality)
+        view.adapter = DefaultPdfPageAdapter(file, pageQuality, dispatcher, scope)
     }
 
     override fun setZoomEnabled(isZoomEnabled: Boolean) {
@@ -39,6 +44,10 @@ class PdfViewControllerImpl(
 
     override fun setOnPageChangedListener(onPageChangedListener: OnPageChangedListener?) {
         this.onPageChangedListener = onPageChangedListener
+    }
+
+    override fun setDispatcher(dispatcher: CoroutineDispatcher) {
+        this.dispatcher = dispatcher
     }
 
     override fun goToPosition(position: Int) {
