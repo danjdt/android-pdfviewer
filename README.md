@@ -8,7 +8,7 @@ A Android PDF Viewer that render pdf using `PdfRenderer` + `kotlin coroutines` a
 ## How to use
 
 ``` kotlin
-    PdfViewer.Builder(rootView)
+    PdfViewer.Builder(rootView, lifecycleScope)
       .build()
       .load(file)
 ```
@@ -22,6 +22,7 @@ A Android PDF Viewer that render pdf using `PdfRenderer` + `kotlin coroutines` a
       .setMaxZoom(Float)
       .setOnPageChangedListener(onPageChangedListener)
       .setOnErrorListener(onErrorListener)
+      .setRenderDispatcher(Dispatchers.Default)
       .build()
       .load(file)
 ```
