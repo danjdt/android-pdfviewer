@@ -5,19 +5,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.danjdt.pdfviewer.renderer.PdfPageRenderer
 import com.danjdt.pdfviewer.utils.PdfPageQuality
+import kotlinx.coroutines.CoroutineDispatcher
 import java.io.File
 
 abstract class PdfPagesAdapter<T : PdfPageViewHolder>(
     private val pdfFile: File,
-    private val quality: PdfPageQuality
+    private val quality: PdfPageQuality,
+    private val dispatcher: CoroutineDispatcher,
 ) : ListAdapter<Bitmap, T>(DiffCallback()) {
 
     private val pdfPageRenderer: PdfPageRenderer by lazy {
-        PdfPageRenderer(pdfFile, quality)
+        PdfPageRenderer(pdfFile, quality, dispatcher)
     }
 
-    fun renderPage(position: Int, onPageRendered: (Bitmap) -> Unit) {
-        pdfPageRenderer.render(position, onPageRendered)
+    suspend fun renderPage(position: Int): Result<Bitmap> {
+        return pdfPageRenderer.render(position)
     }
 
     override fun getItemCount(): Int {
