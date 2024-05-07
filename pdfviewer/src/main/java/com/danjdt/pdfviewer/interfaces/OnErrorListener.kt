@@ -1,6 +1,5 @@
 package com.danjdt.pdfviewer.interfaces
 
-import java.io.IOException
 import java.lang.Exception
 
 interface OnErrorListener {
@@ -9,5 +8,5 @@ interface OnErrorListener {
 
     fun onAttachViewError(e : Exception)
 
-    fun onPdfRendererError(e : IOException)
+    fun onPdfRendererError(e : Exception)
 }
