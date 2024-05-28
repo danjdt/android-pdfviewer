@@ -9,14 +9,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import java.io.File
 
 abstract class PdfPagesAdapter<T : PdfPageViewHolder>(
-    private val pdfFile: File,
-    private val quality: PdfPageQuality,
-    private val dispatcher: CoroutineDispatcher,
+    pdfFile: File,
+    quality: PdfPageQuality,
+    dispatcher: CoroutineDispatcher,
 ) : ListAdapter<Bitmap, T>(DiffCallback()) {
 
-    private val pdfPageRenderer: PdfPageRenderer by lazy {
-        PdfPageRenderer(pdfFile, quality, dispatcher)
-    }
+    private val pdfPageRenderer = PdfPageRenderer(pdfFile, quality, dispatcher)
 
     suspend fun renderPage(position: Int): Result<Bitmap> {
         return pdfPageRenderer.render(position)

@@ -15,16 +15,14 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class PdfPageRenderer(
-    private val file: File,
+    file: File,
     private val quality: PdfPageQuality,
     private val dispatcher: CoroutineDispatcher,
 ) {
     private val deferredMap = mutableMapOf<Int, Deferred<Result<Bitmap>>>()
     private val mutex = Mutex()
 
-    private val pdfRenderer: PdfRenderer by lazy {
-        openRenderer(file)
-    }
+    private val pdfRenderer = openRenderer(file)
 
     val pageCount: Int by lazy {
         pdfRenderer.pageCount

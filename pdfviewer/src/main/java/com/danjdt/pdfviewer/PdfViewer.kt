@@ -39,10 +39,11 @@ class PdfViewer private constructor(
     private fun display(file: File) {
         try {
             setup(file)
-        } catch (e: IOException) {
-            errorListener?.onPdfRendererError(e)
         } catch (e: Exception) {
-            errorListener?.onAttachViewError(e)
+            when (e) {
+                is IOException, is SecurityException -> errorListener?.onPdfRendererError(e)
+                else -> errorListener?.onAttachViewError(e)
+            }
         }
     }
 

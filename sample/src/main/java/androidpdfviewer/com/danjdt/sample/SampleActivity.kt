@@ -13,7 +13,6 @@ import com.danjdt.pdfviewer.interfaces.OnErrorListener
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.utils.PdfPageQuality
 import kotlinx.coroutines.Dispatchers
-import java.io.IOException
 
 
 class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListener {
@@ -86,7 +85,7 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
         e.printStackTrace()
     }
 
-    override fun onPdfRendererError(e: IOException) {
+    override fun onPdfRendererError(e: Exception) {
         //Handle error ...
         e.printStackTrace()
     }
