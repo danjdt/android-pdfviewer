@@ -1,20 +1,20 @@
 package com.danjdt.pdfviewer.view.adapter
 
 import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.danjdt.pdfviewer.renderer.PdfPageRenderer
 import com.danjdt.pdfviewer.utils.PdfPageQuality
 import kotlinx.coroutines.CoroutineDispatcher
-import java.io.File
 
 abstract class PdfPagesAdapter<T : PdfPageViewHolder>(
-    pdfFile: File,
+    pdfRenderer: PdfRenderer,
     quality: PdfPageQuality,
     dispatcher: CoroutineDispatcher,
 ) : ListAdapter<Bitmap, T>(DiffCallback()) {
 
-    private val pdfPageRenderer = PdfPageRenderer(pdfFile, quality, dispatcher)
+    private val pdfPageRenderer = PdfPageRenderer(pdfRenderer, quality, dispatcher)
 
     suspend fun renderPage(position: Int): Result<Bitmap> {
         return pdfPageRenderer.render(position)

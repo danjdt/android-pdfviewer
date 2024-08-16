@@ -1,17 +1,21 @@
 package com.danjdt.pdfviewer.view
 
 import android.content.Context
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.danjdt.pdfviewer.view.adapter.DefaultPdfPageAdapter
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.interfaces.PdfViewController
 import com.danjdt.pdfviewer.utils.PdfPageQuality
+import com.danjdt.pdfviewer.view.adapter.DefaultPdfPageAdapter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 
 class PdfViewControllerImpl(
     context: Context,
@@ -24,9 +28,19 @@ class PdfViewControllerImpl(
     private var dispatcher: CoroutineDispatcher = Dispatchers.IO
     private var lastVisiblePosition = -1
 
+    @Throws(IOException::class, FileNotFoundException::class)
+    private fun getPdfRenderer(file: File): PdfRenderer {
+        //File descriptor of the PDF.
+        val fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+
+        // This is the PdfRenderer we use to render the PDF.
+        return PdfRenderer(fileDescriptor)
+    }
+
     override fun setup(file: File) {
         file.deleteOnExit()
-        view.adapter = DefaultPdfPageAdapter(file, pageQuality, dispatcher, scope)
+        val pdfRenderer = getPdfRenderer(file)
+        view.adapter = DefaultPdfPageAdapter(pdfRenderer, pageQuality, dispatcher, scope)
     }
 
     override fun setZoomEnabled(isZoomEnabled: Boolean) {

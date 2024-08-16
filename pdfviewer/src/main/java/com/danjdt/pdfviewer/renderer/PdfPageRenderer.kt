@@ -2,7 +2,6 @@ package com.danjdt.pdfviewer.renderer
 
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
-import android.os.ParcelFileDescriptor
 import android.util.Log
 import com.danjdt.pdfviewer.utils.PdfPageQuality
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,29 +11,16 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class PdfPageRenderer(
-    file: File,
+    private val pdfRenderer: PdfRenderer,
     private val quality: PdfPageQuality,
     private val dispatcher: CoroutineDispatcher,
 ) {
     private val deferredMap = mutableMapOf<Int, Deferred<Result<Bitmap>>>()
     private val mutex = Mutex()
 
-    private val pdfRenderer = openRenderer(file)
-
-    val pageCount: Int by lazy {
-        pdfRenderer.pageCount
-    }
-
-    private fun openRenderer(file: File): PdfRenderer {
-        //File descriptor of the PDF.
-        val fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-
-        // This is the PdfRenderer we use to render the PDF.
-        return PdfRenderer(fileDescriptor)
-    }
+    val pageCount = pdfRenderer.pageCount
 
     @Suppress("DeferredResultUnused")
     suspend fun render(position: Int): Result<Bitmap> {
