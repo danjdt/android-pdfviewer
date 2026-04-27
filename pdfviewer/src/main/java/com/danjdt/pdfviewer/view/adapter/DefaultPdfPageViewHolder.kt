@@ -2,7 +2,9 @@ package com.danjdt.pdfviewer.view.adapter
 
 import android.graphics.Bitmap
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.updateLayoutParams
 import com.danjdt.pdfviewer.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -24,7 +26,9 @@ class DefaultPdfPageViewHolder(
             val renderResult = renderBlock(position)
             ensureActive()
             renderResult.onSuccess { page ->
-                imageView.layoutParams.height =  (page.height.toDouble() * imageView.width / page.width).toInt()
+                imageView.updateLayoutParams {
+                    height = ViewGroup.LayoutParams.WRAP_CONTENT
+                }
                 imageView.setImageBitmap(page)
             }
         }
